@@ -8,6 +8,6 @@ services:
     environment:
       NODE_ENV: production
     ports:
-      - 3001:${SERVER_PORT}
+      - ${SERVER_PORT}:${SERVER_PORT}
     env_file:
       - .env
