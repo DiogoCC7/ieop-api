@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import jasminApi from "../services/jasmin-api";
 
-function getHighestPrice(priceListLines: [{ amount: number; symbol: string}]) {
+function getHighestPrice(priceListLines: [{ amount: number; symbol: string }]) {
     if (priceListLines.length <= 0) {
         return {
             amount: 0,
@@ -11,7 +11,7 @@ function getHighestPrice(priceListLines: [{ amount: number; symbol: string}]) {
 
     return priceListLines.reduce(
         (prev, current) =>
-        prev.amount > current.amount ? prev : current
+            prev.amount > current.amount ? prev : current
     );
 }
 

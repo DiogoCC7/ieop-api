@@ -15,6 +15,7 @@ export default async function usersRoutes(app: FastifyInstance, opts) {
             locality: value.cityName,
             n_port: value.address,
             name: value.name,
+            nif: value.companyTaxID,
             phone: value.mobile,
             postal_code: value.postalZone,
             street: value.streetName
