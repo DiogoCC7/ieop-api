@@ -3,13 +3,15 @@ import jasminApi from "../services/jasmin-api";
 
 export default async function usersRoutes(app: FastifyInstance, opts) {
     app.get("/users", async (request, reply) => {
-        const response = await jasminApi.get("/salesCore/customerParties");
+        const { data, status } = await jasminApi.get<User[]>("/salesCore/customerParties");
 
-        if (response.status !== 200) {
+        if (status !== 200) {
             throw new Error("Error fetching users");
         }
 
-        return (response.data as [User]).map((value) => ({
+        const filterData = data.filter((value) => value.mobile !== null);
+
+        return filterData.map((value) => ({
             country: value.countryDescription,
             email: value.createdBy,
             locality: value.cityName,
