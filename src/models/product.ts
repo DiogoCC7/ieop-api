@@ -1,3 +1,11 @@
+type PriceParams = {
+    priceAmount: {
+        amount: number;
+        symbol: string;
+    }
+};
+
+
 interface Product {
     barcode: string;
     brand: string;
@@ -6,10 +14,5 @@ interface Product {
     assortment: string;
     image: string;
     itemKey: string;
-    priceListLines: [
-        priceAmount: {
-            amount: number;
-            symbol: string;
-        }
-    ];
+    priceListLines: PriceParams[];
 }

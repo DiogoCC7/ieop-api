@@ -1,7 +1,9 @@
 import { FastifyInstance } from "fastify";
 import jasminApi from "../services/jasmin-api";
 
-function getHighestPrice(priceListLines: [{ amount: number; symbol: string }]) {
+const Categories = ["Adventure", "Fight", "Racing", "RPG", "Shooter", "Simulation", "Sports", "Strategy"];
+
+function getHighestPrice(priceListLines: PriceParams[]) {
     if (priceListLines.length <= 0) {
         return {
             amount: 0,
@@ -9,28 +11,32 @@ function getHighestPrice(priceListLines: [{ amount: number; symbol: string }]) {
         };
     }
 
-    return priceListLines.reduce(
+    const price = priceListLines.reduce(
         (prev, current) =>
-            prev.amount > current.amount ? prev : current
+            prev.priceAmount.amount > current.priceAmount.amount ? prev : current
     );
+
+    return price.priceAmount;
 }
 
 
 export default async function productRoutes(app: FastifyInstance, opts) {
-    app.get("/products", async (request, reply) => {
-        const response = await jasminApi.get("/salesCore/salesitems");
+    app.get("/products", async (_request, _reply) => {
+        const { data, status } = await jasminApi.get<Product[]>("/salesCore/salesitems");
 
-        if (response.status !== 200) {
+        if (status !== 200) {
             throw new Error("Error fetching products");
         }
 
-        return (response.data as [Product]).map((value) => {
-            const highestPrice = getHighestPrice(value.priceListLines);
+        const filterData = data.filter((value) => value.barcode !== null);
 
+        return filterData.map((value) => {
+            const highestPrice = getHighestPrice(value.priceListLines);
+            
             return {
                 bar_code: value.barcode,
                 brand: value.brand,
-                category: 'not defined',
+                category: Categories[Math.floor(Math.random() * Categories.length)],
                 description: value.complementaryDescription,
                 edition: value.brandModel,
                 family: value.assortment,
