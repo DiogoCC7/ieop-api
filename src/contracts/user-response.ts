@@ -1,4 +1,5 @@
 interface UserResponse {
+    id: string;
     country: string;
     email: string;
     locality: string;

@@ -3,6 +3,9 @@ import refreshAcessToken from "./oauth-api";
 
 const jasminApi = axios.create({
     baseURL: `https://my.jasminsoftware.com/api/${process.env.TENANT}/${process.env.ORGANIZATION}`,
+    headers: {
+        'Content-Type': 'application/json'
+    }
 });
 
 jasminApi.interceptors.response.use(
