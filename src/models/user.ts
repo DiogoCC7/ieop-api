@@ -1,6 +1,6 @@
 interface User {
     countryDescription: string;
-    createdBy: string;
+    electronicMail: string;
     cityName: string;
     name: string;
     companyTaxID: string;

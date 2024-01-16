@@ -1,4 +1,5 @@
 interface ProductResponse {
+    id: string;
     bar_code: string;
     brand: string;
     category: string;

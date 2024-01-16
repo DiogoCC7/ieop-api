@@ -16,7 +16,7 @@ function getHighestPrice(priceListLines: PriceParams[]) {
             prev.priceAmount.amount > current.priceAmount.amount ? prev : current
     );
 
-    return price.priceAmount;
+    return price;
 }
 
 
@@ -31,9 +31,10 @@ export default async function productRoutes(app: FastifyInstance, opts) {
         const filterData = data.filter((value) => value.barcode !== null);
 
         return filterData.map((value) => {
-            const highestPrice = getHighestPrice(value.priceListLines);
+            const highestPrice = getHighestPrice(value.priceListLines) as PriceParams;            
             
             return {
+                id: value.itemKey,
                 bar_code: value.barcode,
                 brand: value.brand,
                 category: Categories[Math.floor(Math.random() * Categories.length)],
@@ -42,8 +43,8 @@ export default async function productRoutes(app: FastifyInstance, opts) {
                 family: value.assortment,
                 image: value.image,
                 name: value.itemKey,
-                price: highestPrice.amount,
-                price_unit: highestPrice.symbol,
+                price: highestPrice.priceAmount.amount,
+                price_unit: highestPrice.priceAmount.symbol,
                 quantity: value.priceListLines.length
             } as ProductResponse;
         });
