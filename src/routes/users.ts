@@ -21,7 +21,7 @@ export default async function usersRoutes(app: FastifyInstance, opts) {
           throw new Error("Error fetching users");
       }
 
-      return { message: "User created successfully" }
+      return req;
     });
 
     app.get("/users", async (request, reply) => {
