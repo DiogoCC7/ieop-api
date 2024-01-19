@@ -69,6 +69,8 @@ export default async function name(app: FastifyInstance, opts) {
 
     app.get("/invoices", async (request, _reply) => {
         const { invoiceId } = request.query as { invoiceId: string };
+        console.log("Id: " + invoiceId);
+        
         const { data: invoiceData, status: statusInvoice } = await jasminApi.get<InvoiceResponse>(`/billing/invoices/${invoiceId}`);
 
         if (statusInvoice !== 200) {
