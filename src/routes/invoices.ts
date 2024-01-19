@@ -68,21 +68,8 @@ export default async function name(app: FastifyInstance, opts) {
     });
 
     app.get("/invoices", async (request, _reply) => {
-        // const { invoiceId } = request.query as GetInvoiceRequest;
-        const query = request.query;
-        const body = request.body;
-        const headers = request.headers;
-        const params = request.params;
-        const raw = request.raw;
-        const url = request.url;
-
-        console.log("Query: " + query);
-        console.log("Body: " + body);
-        console.log("Params: " + params);
-        console.log("Raw: " + raw);
-        console.log("URL: " + url);
-
-        const { data: invoiceData, status: statusInvoice } = await jasminApi.get<InvoiceResponse>(`/billing/invoices/`);//${invoiceId}
+        const { id } = request.query as { id: string };
+        const { data: invoiceData, status: statusInvoice } = await jasminApi.get<InvoiceResponse>(`/billing/invoices/${id}`);
 
         if (statusInvoice !== 200) {
             throw new Error("Error creating an invoice");
