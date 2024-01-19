@@ -13,6 +13,20 @@ type InvoiceRequest = {
     discount: number
 }
 
+type InvoiceResponse = {
+    invoiceId: string,
+    discount: number,
+    grossValue: {
+        amount: number
+    },
+    taxTotal: {
+        amount: number
+    },
+    allowanceChargeAmount: {
+        amount: number
+    }
+}
+
 export default async function name(app: FastifyInstance, opts) {
     function convertDate(date: Date) {
         date.setFullYear(2023);
@@ -48,20 +62,29 @@ export default async function name(app: FastifyInstance, opts) {
             throw new Error("Error creating an invoice");
         }
 
-        return data;
+        return {
+            invoiceId: data
+        };
     });
 
-    app.get("/invoices/:invoiceId", async (request, reply) => {
-        const { invoiceId } = request.params as GetInvoiceRequest;
+    app.get("/invoices", async (request, _reply) => {
+        // const { invoiceId } = request.query as GetInvoiceRequest;
+        const query = request.query;
+        console.log(query);
+        
 
-        const response = await jasminApi.get(`/billing/invoices/${invoiceId}`);
+        const { data: invoiceData, status: statusInvoice } = await jasminApi.get<InvoiceResponse>(`/billing/invoices/`);//${invoiceId}
 
-        if (response.status !== 200) {
+        if (statusInvoice !== 200) {
             throw new Error("Error creating an invoice");
         }
 
         return {
-            invoiceId: response.data
+            invoiceId: invoiceData.invoiceId,
+            discount: invoiceData.discount,
+            discountValue: invoiceData.allowanceChargeAmount.amount,
+            totalAmount: invoiceData.grossValue.amount + invoiceData.taxTotal.amount,
+            taxValue: invoiceData.taxTotal.amount
         } as CreateInvoiceResponse;
     });
 }
