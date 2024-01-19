@@ -30,7 +30,7 @@ function getHighestPrice(priceListLines: PriceParams[]) {
 
 export default async function productRoutes(app: FastifyInstance, opts) {
     async function fetchProductWharehouse(id: string) {
-        const { data: warehouseProducts, status: warehouseProductsStatus } = await jasminApi.get<WarehouseProduct>(`/materialscore/materialsitems${id}`);
+        const { data: warehouseProducts, status: warehouseProductsStatus } = await jasminApi.get<WarehouseProduct>(`/materialscore/materialsitems/${id}`);
 
         if (warehouseProductsStatus !== 200) {
             throw new Error("Error fetching warehouse products");
