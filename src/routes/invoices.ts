@@ -80,7 +80,7 @@ export default async function name(app: FastifyInstance, opts) {
             invoiceId: invoiceData.invoiceId,
             discount: invoiceData.discount,
             discountValue: invoiceData.allowanceChargeAmount.amount,
-            totalAmount: invoiceData.grossValue.amount,
+            totalAmount: invoiceData.grossValue.amount + invoiceData.taxTotal.amount - invoiceData.allowanceChargeAmount.amount,
             taxValue: invoiceData.taxTotal.amount
         } as CreateInvoiceResponse;
     });
