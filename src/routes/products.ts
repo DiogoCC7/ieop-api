@@ -48,9 +48,9 @@ export default async function productRoutes(app: FastifyInstance, opts) {
 
         const filterData = products.filter((value) => value.barcode !== null);
 
-        return filterData.map(async (value) => {
+        return await Promise.all(filterData.map(async (value) => {
             const highestPrice = getHighestPrice(value.priceListLines) as PriceParams;
-            const extension = await fetchProductWharehouse(value.itemKey);        
+            const extension = await fetchProductWharehouse(value.itemKey);
             
             return {
                 id: value.itemKey,
@@ -66,6 +66,6 @@ export default async function productRoutes(app: FastifyInstance, opts) {
                 price_unit: highestPrice.priceAmount.symbol,
                 quantity: extension.materialsItemWarehouses[0].stockBalance,
             } as ProductResponse;
-        });
+        }));
     });
 }
