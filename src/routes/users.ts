@@ -2,7 +2,7 @@ import { FastifyInstance } from "fastify";
 import jasminApi from "../services/jasmin-api";
 
 export default async function usersRoutes(app: FastifyInstance, opts) {
-    app.post("/users", async (request, reply) => {
+    app.post("/users", async (request, _reply) => {
         const req = request.body as Omit<UserResponse, "id">;
         
         const { status: createdStatus } = await jasminApi.post("/salesCore/customerParties", {
@@ -43,7 +43,7 @@ export default async function usersRoutes(app: FastifyInstance, opts) {
         } as UserResponse));
     });
 
-    app.get("/users", async (request, reply) => {
+    app.get("/users", async (_request, _reply) => {
         const { data, status } = await jasminApi.get<User[]>("/salesCore/customerParties");
 
         if (status !== 200) {
