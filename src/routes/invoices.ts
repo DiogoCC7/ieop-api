@@ -76,12 +76,11 @@ export default async function name(app: FastifyInstance, opts) {
         const raw = request.raw;
         const url = request.url;
 
-        console.log(query);
-        console.log(body);
-        console.log(headers);
-        console.log(params);
-        console.log(raw);
-        console.log(url);
+        console.log("Query: " + query);
+        console.log("Body: " + body);
+        console.log("Params: " + params);
+        console.log("Raw: " + raw);
+        console.log("URL: " + url);
 
         const { data: invoiceData, status: statusInvoice } = await jasminApi.get<InvoiceResponse>(`/billing/invoices/`);//${invoiceId}
 
