@@ -6,9 +6,11 @@ type InvoiceRequest = {
     products : [
         {
             productId: string,
-            amount: number
+            amount: number,
+            quantity: number
         }
-    ]
+    ],
+    discount: number
 }
 
 export default async function name(app: FastifyInstance, opts) {
@@ -24,13 +26,18 @@ export default async function name(app: FastifyInstance, opts) {
         const postingDate = new Date();
         postingDate.setDate(documentDate.getDate() + 30);
 
+        const totalAmount = req.products.reduce((prev, current) => prev + current.amount * current.quantity, 0);
+        const discountPercent = req.discount * 100 / totalAmount;
+
         const { status, data } = await jasminApi.post("/billing/invoices", {
             buyercustomerparty: req.customerId,
             serie: 2023,
+            discount: discountPercent,
             documentDate: "2023-12-17 00:16:44",
             postingDate: "2023-12-26 00:16:44",
             documentLines: req.products.map(product => ({
                 salesItem: product.productId,
+                quantity: product.quantity,
                 unitPrice: {
                     amount: product.amount
                 }
